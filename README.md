@@ -16,7 +16,7 @@ On machine1 do the following:
 python setup.py --name Jacob
 ```
 
-This will give machine1 a nickname `Jacob`.
+You may be required to enter the password for your central server. Then the above command will give machine1 a nickname `Jacob`.
 
 On machine2 do the following:
 
