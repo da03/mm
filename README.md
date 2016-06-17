@@ -6,7 +6,7 @@ Painful having to enter passwords when copying files among two machines? Tired o
 
 You must have a central server with a static ip or domain name in order to maintain the information of other machines. You can only copy files to a machine with a public ip address (or domain name).
 
-### Setup:
+### Setup (You only need to do that once for each machine):
 
 First, set the central server in `config.txt` such that it has the following format:
 
@@ -59,7 +59,7 @@ Now, you can copy files using the following command:
 mcp Jacob/path/to/file1 Israel/path/to/file2
 ```
 
-Or copy to your local machine (You must run `python setup.py` beforehand):
+Or copy to your local machine (You must run `python setup.py --name nickname` and `source ~/.bashrc` beforehand):
 
 ```
 mcp Jacob/path/to/file1 /path/to/file2
