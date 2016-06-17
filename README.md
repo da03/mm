@@ -1,6 +1,20 @@
 # mm
 
-Painful having to enter passwords when copying files among two machines? Tired of adding ssh public key files between each pair of machines you have? Not able to remember the long ip adresses of your machines? Machines Management (mm) provides functionalities to manage multiple machines, adding key files automatically for you. You can assign nicknames to your machines, and can copy files, list files, log in to other machines by using their nicknames, as simple as `mcp nickname1:path/to/file1 nickname2:path/to/file2`. The implementation is purely based on python 2.7, with no additional package requirements.
+Painful having to enter passwords when copying files among any two machines you have? 
+
+Tired of adding ssh public key files between each pair of machines you have? 
+
+Not able to remember or discriminate the long ip adresses of your machines? 
+
+Machines Management (mm) provides functionalities to manage multiple machines, managing SSH key files automatically for you. You can 
+
+* assign nicknames to your machines, 
+
+* copy files, list files, log in to other machines by using their nicknames, as simple as `mcp nickname1:path/to/file1 nickname2:path/to/file2`.
+
+* avoid entering passwords every time after setting up only ONCE. 
+
+The implementation is purely based on python 2.7, with no additional package requirements.
 
 ### Requirements:
 
