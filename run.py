@@ -75,6 +75,10 @@ def main(args):
     elif mode == 'mssh':
         dest = args[2]
         parameters = process_args('')
+    elif mode == 'mcpr':
+        source = args[2]
+        dest = args[3]
+        parameters = process_args(args[4:])
     else:
         assert False, mode
 
@@ -127,7 +131,7 @@ def main(args):
     # sync machine file, add central server key file to local authorized_keys
     sync_machine(ssh_relative_path, ssh_abs_path, app_relative_path, app_abs_path, central_server)
 
-    if mode == 'mcp':
+    if mode == 'mcp' or mode == 'mcpr':
         pos = source.find(':')
         if pos > 0:
             source_name = source[:pos]
@@ -150,7 +154,10 @@ def main(args):
         # copy authorized key file
         remote_add_machine(app_relative_path, central_server, source_name, source_machine, dest_machine, ssh_abs_path)
 
-        cmd = 'scp %s %s:%s'%(source_machine+':'+source_path, dest_machine, dest_path)
+        if mode == 'mcp':
+            cmd = 'scp %s %s:%s'%(source_machine+':'+source_path, dest_machine, dest_path)
+        else:
+            cmd = 'scp -r %s %s:%s'%(source_machine+':'+source_path, dest_machine, dest_path)
         print (cmd)
         ret = subprocess.call(["ssh", central_server, cmd])
     elif mode == 'mls':
