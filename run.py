@@ -171,6 +171,7 @@ def main(args):
         params = parse_params(parameters.config_path)
         assert dest_name in params, dest_name
         dest_machine = params[dest_name]
+        remote_add_machine(app_relative_path, central_server, name, params[name], dest_machine, ssh_abs_path)
         cmd = 'ls -l %s'%(dest_path)
         ret = subprocess.check_output(["ssh", dest_machine, cmd])
         print (ret)
@@ -179,6 +180,7 @@ def main(args):
         params = parse_params(parameters.config_path)
         assert dest_name in params, dest_name
         dest_machine = params[dest_name]
+        remote_add_machine(app_relative_path, central_server, name, params[name], dest_machine, ssh_abs_path)
         ret = subprocess.call(["ssh", dest_machine])
 
 
