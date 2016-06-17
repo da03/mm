@@ -132,6 +132,12 @@ def main(args):
 
     logging.info('Key file added to central server.')
 
+    source_pub_key = os.path.join(ssh_abs_path, 'id_rsa.pub')
+    dest_pub_key = os.path.join(os.path.join(app_abs_path, 'keys'), 'id_rsa.pub.%s'%name)
+    shutil.copy(source_pub_key, dest_pub_key)
+    cmd = 'python %s %s %s %s %s'%(os.path.join(app_abs_path, 'add_machine.py'), name, user_name, host_name, public_ip)
+    subprocess.call(cmd, shell=True)
+
     # sync machine file, add central server key file to local authorized_keys
     sync_machine(ssh_relative_path, ssh_abs_path, app_relative_path, app_abs_path, central_server)
 

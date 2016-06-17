@@ -71,10 +71,10 @@ def main(args):
         parameters = process_args(args[4:])
     elif mode == 'mls':
         dest = args[2]
-        parameters = process_args(args[3:])
+        parameters = process_args('')
     elif mode == 'mssh':
         dest = args[2]
-        parameters = process_args(args[3:])
+        parameters = process_args('')
     else:
         assert False, mode
 
@@ -153,6 +153,27 @@ def main(args):
         cmd = 'scp %s %s:%s'%(source_machine+':'+source_path, dest_machine, dest_path)
         print (cmd)
         ret = subprocess.call(["ssh", central_server, cmd])
+    elif mode == 'mls':
+        pos = dest.find(':')
+        if pos > 0:
+            dest_name = dest[:pos]
+            dest_path = dest[(pos+1):]
+        else:
+            dest_name = name
+            dest_path = os.path.realpath(dest)
+        params = parse_params(parameters.config_path)
+        assert dest_name in params, dest_name
+        dest_machine = params[dest_name]
+        cmd = 'ls -l %s'%(dest_path)
+        ret = subprocess.check_output(["ssh", dest_machine, cmd])
+        print (ret)
+    elif mode == 'mssh':
+        dest_name = dest
+        params = parse_params(parameters.config_path)
+        assert dest_name in params, dest_name
+        dest_machine = params[dest_name]
+        ret = subprocess.call(["ssh", dest_machine])
+
 
 
 if __name__ == "__main__":
