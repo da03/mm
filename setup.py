@@ -33,8 +33,8 @@ def sync_machine(ssh_relative_path, ssh_abs_path, app_relative_path, central_ser
     logging.info('scp %s %s'%(source_pub_key, dest_pub_key))
     ret = subprocess.call(["scp", source_pub_key, dest_pub_key])
     # copy public key file
-    authorized_keys_path = os.path.join(ssh_relative_path, 'authorized_keys')
-    tmp_authorized_keys_path = os.path.join(ssh_relative_path, 'authorized_keys.tmp')
+    authorized_keys_path = os.path.join(ssh_abs_path, 'authorized_keys')
+    tmp_authorized_keys_path = os.path.join(ssh_abs_path, 'authorized_keys.tmp')
     # create authorized_keys if not present
     if not os.path.isfile(authorized_keys_path):
         f = open(authorized_keys_path, 'w')

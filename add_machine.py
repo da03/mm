@@ -1,4 +1,4 @@
-import sys, subprocess, shutil
+import sys, subprocess, shutil, os
 
 if __name__ == '__main__':
     name = sys.argv[1]
@@ -11,11 +11,12 @@ if __name__ == '__main__':
     home_abs_path = os.path.expanduser('~')
     app_abs_path = os.path.dirname(os.path.realpath(__file__))
     app_relative_path = app_dir.replace(app_abs_path, '~')
+    ssh_abs_path = ssh_relative_path.replace('~', home_abs_path)
 
-    key_file_path  = os.path.join(app_relative_path, 'keys', 'id_rsa.pub.%s'%name)
+    key_file_path  = os.path.join(app_abs_path, 'keys', 'id_rsa.pub.%s'%name)
 
-    authorized_keys_path = os.path.join(ssh_relative_path, 'authorized_keys')
-    tmp_authorized_keys_path = os.path.join(ssh_relative_path, 'authorized_keys.tmp')
+    authorized_keys_path = os.path.join(ssh_abs_path, 'authorized_keys')
+    tmp_authorized_keys_path = os.path.join(ssh_abs_path, 'authorized_keys.tmp')
     # create authorized_keys if not present
     if not os.path.isfile(authorized_keys_path):
         f = open(authorized_keys_path, 'w')
@@ -33,8 +34,8 @@ if __name__ == '__main__':
             fout.write(open(key_file_path).readline())
     shutil.move(tmp_authorized_keys_path, authorized_keys_path)
 
-    machine_path = os.path.join(app_relative_path, 'config.txt')
-    tmp_machine_path = os.path.join(app_relative_path, 'config.txt.tmp')
+    machine_path = os.path.join(app_abs_path, 'config.txt')
+    tmp_machine_path = os.path.join(app_abs_path, 'config.txt.tmp')
     with open(machine_path, 'r') as fin:
         with open(tmp_machine_path, 'w') as fout:
             for line in fin:
