@@ -72,26 +72,26 @@ This will give machine2 a nickname `Israel`.
 Now, you can copy files using the following command:
 
 ```
-mcp Jacob/path/to/file1 Israel/path/to/file2
+mcp Jacob:path/to/file1 Israel:path/to/file2
 ```
 
 Or copy to your local machine (You must run `python setup.py --name nickname` and `source ~/.bashrc` beforehand):
 
 ```
-mcp Jacob/path/to/file1 /path/to/file2
+mcp Jacob:path/to/file1 path/to/file2
 ```
 
 ### Copy directories:
 
 ```
-mcpr Jacob/path/to/dir1 Israel/path/to/dir2
+mcpr Jacob:path/to/dir1 Israel:path/to/dir2
 ```
 
 ### List files:
 Furthermore, you can list files on any machine:
 
 ```
-mls Jacob/path/to/file1
+mls Jacob:path/to/file1
 ```
 
 ### Log in to other machines:
