@@ -21,6 +21,35 @@ def process_args(args):
     parameters = parser.parse_args(args)
     return parameters
 
+def add_machine(app_relative_path, central_server, name, user_name, host_name, public_ip):
+    cmd = 'python %s %s %s %s %s'%(os.path.join(app_relative_path, 'add_machine.py'), name, user_name, host_name, public_ip)
+    #cmd = 'cat %s >> %s'%(os.path.join(app_relative_dir, 'keys', 'id_rsa.pub.%s'%name), os.path.join(base_ssh_dir, 'authorized_keys'))
+    ret = subprocess.call(["ssh", central_server, cmd])
+
+def sync_machine(ssh_relative_path, ssh_abs_path, app_relative_path, central_server):
+    dest_pub_key = os.path.join(app_relative_path, 'id_rsa.pub')
+    source_pub_key = "%s:%s"%(central_server,os.path.join(ssh_relative_path, 'id_rsa.pub'))
+    print ('scp %s %s'%(source_pub_key, dest_pub_key))
+    logging.info('scp %s %s'%(source_pub_key, dest_pub_key))
+    ret = subprocess.call(["scp", source_pub_key, dest_pub_key])
+    # copy public key file
+    authorized_keys_path = os.path.join(ssh_relative_path, 'authorized_keys')
+    tmp_authorized_keys_path = os.path.join(ssh_relative_path, 'authorized_keys.tmp')
+    # create authorized_keys if not present
+    if not os.path.isfile(authorized_keys_path):
+        f = open(authorized_keys_path, 'w')
+        f.close()
+
+    # add to authorized_keys
+    with open(authorized_keys_path) as fin:
+        with open(tmp_authorized_keys_path, 'w') as fout:
+            for line in fin:
+                if central_server in line:
+                    continue
+                fout.write(line)
+            fout.write(open(dest_pub_key).readline())
+    shutil.move(tmp_authorized_keys_path, authorized_keys_path)
+
 def main(args):
     parameters = process_args(args)
     logging.basicConfig(
@@ -28,25 +57,51 @@ def main(args):
         format='%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s',
         filename=parameters.log_path)
 
-    home_dir = os.path.expanduser('~')
-    app_dir = os.path.dirname(os.path.realpath(__file__))
-    app_relative_dir = app_dir.replace(home_dir, '~')
-    logging.info('Application base directory: %s.' %app_relative_dir)
-    base_ssh_dir = '~/.ssh'
-    name = parameters.name
-    base_ssh_dir_abs = base_ssh_dir.replace('~',os.path.expanduser('~'))
+    # figure out paths
+    home_abs_path = os.path.expanduser('~')
+    app_abs_path = os.path.dirname(os.path.realpath(__file__))
+    app_relative_path = app_abs_path.replace(home_abs_path, '~')
+    logging.info('Application base directory: %s.' %app_relative_path)
+
+    ssh_relative_path = '~/.ssh'
+    ssh_abs_path = ssh_relative_path.replace('~', home_abs_path)
+
     name = parameters.name
     # read config file
     params = parse_params(parameters.config_path)
+
     # add public key file to central server public key file
     assert 'central' in params, 'central server must be set in config file %s. The required format is \'central: username@machine-ip\''%parameters.config_path
 
     central_server = params['central']
     logging.info('Central server: %s'%central_server)
-    source_pub_key = os.path.join(base_ssh_dir_abs, 'id_rsa.pub')
-    dest_pub_key = "%s:%s"%(central_server,os.path.join(base_ssh_dir, 'id_rsa.pub.%s'%name))
+
+    source_pub_key = os.path.join(ssh_abs_path, 'id_rsa.pub')
+    dest_pub_key = "%s:%s"%(central_server,os.path.join(os.path.join(app_relative_path, 'keys'), 'id_rsa.pub.%s'%name))
     print ('scp %s %s'%(source_pub_key, dest_pub_key))
+    logging.info('scp %s %s'%(source_pub_key, dest_pub_key))
+    # copy public key file
     ret = subprocess.call(["scp", source_pub_key, dest_pub_key])
+
+    # get hostname
+    host_name = subprocess.check_output(["hostname"])
+    assert host_name, 'hostname command fails!'
+    host_name = host_name.strip()
+    # get username
+    user_name = subprocess.check_output(["whoami"])
+    assert user_name, 'whoami command fails!'
+    user_name = user_name.strip()
+    # get public ip
+    public_ip = subprocess.check_output("wget http://ipinfo.io/ip -qO -", shell=True)
+    assert public_ip, 'wget command fails!'
+    public_ip = public_ip.strip()
+    # add to authorized keys
+    add_machine(app_relative_path, central_server, name, user_name, host_name, public_ip)
+
+    logging.info('Key file added to central server.')
+
+    # sync machine file, add central server key file to local authorized_keys
+    sync_machine(ssh_relative_path, ssh_abs_path, app_relative_path, central_server)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
