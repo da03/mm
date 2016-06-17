@@ -23,7 +23,7 @@ def add_machine(app_relative_path, central_server, name, user_name, host_name, p
     ret = subprocess.call(["ssh", central_server, cmd])
 
 def remote_add_machine(app_relative_path, central_server, source_name, source_machine, dest_machine, ssh_abs_path):
-    cmd = 'scp %s %s:%s'%(central_server+':'+os.path.join(app_relative_path, 'keys/id_rsa.pub.%s'%source_name), dest_machine, os.path.join(app_relative_path, 'keys/'))
+    cmd = 'scp -q %s %s:%s'%(central_server+':'+os.path.join(app_relative_path, 'keys/id_rsa.pub.%s'%source_name), dest_machine, os.path.join(app_relative_path, 'keys/'))
     ret = subprocess.call(["ssh", central_server, cmd])
     logging.info('ssh %s %s'%(central_server, cmd))
     pos = source_machine.find('@')
@@ -37,11 +37,11 @@ def remote_add_machine(app_relative_path, central_server, source_name, source_ma
 def sync_machine(ssh_relative_path, ssh_abs_path, app_relative_path, app_abs_path, central_server):
     dest_pub_key = os.path.join(app_abs_path, 'id_rsa.pub')
     source_pub_key = "%s:%s"%(central_server,os.path.join(ssh_relative_path, 'id_rsa.pub'))
-    logging.info('scp %s %s'%(source_pub_key, dest_pub_key))
-    ret = subprocess.call(["scp", source_pub_key, dest_pub_key])
+    logging.info('scp -q %s %s'%(source_pub_key, dest_pub_key))
+    ret = subprocess.call("scp -q %s %s" %(source_pub_key, dest_pub_key), shell=True)
     source_config_file = '%s:'%central_server + os.path.join(app_relative_path, 'config.txt')
     dest_config_file = os.path.join(app_abs_path, 'config.txt')
-    ret = subprocess.call(["scp", source_config_file, dest_config_file])
+    ret = subprocess.call("scp -q %s %s" %(source_config_file, dest_config_file), shell=True)
     # copy public key file
     authorized_keys_path = os.path.join(ssh_abs_path, 'authorized_keys')
     tmp_authorized_keys_path = os.path.join(ssh_abs_path, 'authorized_keys.tmp')
@@ -107,9 +107,9 @@ def main(args):
 
     source_pub_key = os.path.join(ssh_abs_path, 'id_rsa.pub')
     dest_pub_key = "%s:%s"%(central_server,os.path.join(os.path.join(app_relative_path, 'keys'), 'id_rsa.pub.%s'%name))
-    logging.info('scp %s %s'%(source_pub_key, dest_pub_key))
+    logging.info('scp -q %s %s'%(source_pub_key, dest_pub_key))
     # copy public key file
-    ret = subprocess.call(["scp", source_pub_key, dest_pub_key])
+    ret = subprocess.call("scp -q %s %s" %(source_pub_key, dest_pub_key), shell=True)
 
     # get hostname
     host_name = subprocess.check_output(["hostname"])
@@ -155,9 +155,9 @@ def main(args):
         remote_add_machine(app_relative_path, central_server, source_name, source_machine, dest_machine, ssh_abs_path)
 
         if mode == 'mcp':
-            cmd = 'scp %s %s:%s'%(source_machine+':'+source_path, dest_machine, dest_path)
+            cmd = 'scp -q %s %s:%s'%(source_machine+':'+source_path, dest_machine, dest_path)
         else:
-            cmd = 'scp -r %s %s:%s'%(source_machine+':'+source_path, dest_machine, dest_path)
+            cmd = 'scp -q -r %s %s:%s'%(source_machine+':'+source_path, dest_machine, dest_path)
         print (cmd)
         ret = subprocess.call(["ssh", central_server, cmd])
     elif mode == 'mls':
