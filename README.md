@@ -8,6 +8,8 @@ You must have a central server with a static ip or domain name in order to maint
 
 ### Setup (You only need to do that once for each machine):
 
+Make sure the installation location relative to home directory is the same on every machine.
+
 First, set the central server in `config.txt` such that it has the following format:
 
 ```
