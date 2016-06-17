@@ -24,6 +24,8 @@ def process_args(args):
 def add_machine(app_relative_path, central_server, name, user_name, host_name, public_ip):
     cmd = 'python %s %s %s %s %s'%(os.path.join(app_relative_path, 'add_machine.py'), name, user_name, host_name, public_ip)
     #cmd = 'cat %s >> %s'%(os.path.join(app_relative_dir, 'keys', 'id_rsa.pub.%s'%name), os.path.join(base_ssh_dir, 'authorized_keys'))
+    print ('ssh %s %s'%(central_server, cmd))
+    logging.info('ssh %s %s'%(central_server, cmd))
     ret = subprocess.call(["ssh", central_server, cmd])
 
 def sync_machine(ssh_relative_path, ssh_abs_path, app_relative_path, central_server):
@@ -49,6 +51,7 @@ def sync_machine(ssh_relative_path, ssh_abs_path, app_relative_path, central_ser
                 fout.write(line)
             fout.write(open(dest_pub_key).readline())
     shutil.move(tmp_authorized_keys_path, authorized_keys_path)
+    os.chmod(authorized_keys_path, 0600)
 
 def main(args):
     parameters = process_args(args)

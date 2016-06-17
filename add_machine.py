@@ -32,8 +32,8 @@ if __name__ == '__main__':
                     continue
                 fout.write(line)
             fout.write(open(key_file_path).readline())
-            os.fchmod(fout, 0600)
             shutil.move(tmp_authorized_keys_path, authorized_keys_path)
+        os.chmod(authorized_keys_path, 0600)
     machine_path = os.path.join(app_abs_path, 'config.txt')
     tmp_machine_path = os.path.join(app_abs_path, 'config.txt.tmp')
     with open(machine_path, 'r') as fin:
