@@ -10,7 +10,7 @@ if __name__ == '__main__':
     # figure out paths
     home_abs_path = os.path.expanduser('~')
     app_abs_path = os.path.dirname(os.path.realpath(__file__))
-    app_relative_path = app_dir.replace(app_abs_path, '~')
+    app_relative_path = app_abs.replace(home_abs_path, '~')
     ssh_abs_path = ssh_relative_path.replace('~', home_abs_path)
 
     key_file_path  = os.path.join(app_abs_path, 'keys', 'id_rsa.pub.%s'%name)
