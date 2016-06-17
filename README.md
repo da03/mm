@@ -1,6 +1,10 @@
 # mm
 
-Machines Management provides functionalities to assign nicknames to your machines, and you can copy files, list files, log in to other machines by using their nicknames without having to enter the passwords every time.
+Painful having to enter passwords when copying files among two machines? Tired of adding ssh public key files between each pair of machines you have? Machines Management (mm) provides functionalities to manage multiple machines, adding key files automatically for you. You can assign nicknames to your machines, and can copy files, list files, log in to other machines by using their nicknames, as simple as `mcp nickname1:path/to/file1 nickname2:path/to/file2`. The implementation is purely based on python 2.7, with no additional package requirements.
+
+### Requirements:
+
+You must have a central server with a static ip or domain name in order to maintain the information of other machines. You can only copy files to a machine with a public ip address (or domain name).
 
 ### Setup:
 
@@ -18,10 +22,18 @@ Then central server needs to be setuped up, on central server do:
 python setup.py --name central
 ```
 
+```
+source ~/.bashrc
+```
+
 On machine1 do the following:
 
 ```
 python setup.py --name Jacob
+```
+
+```
+source ~/.bashrc
 ```
 
 You may be required to enter the password TWICE for your central server. Then the above command will give machine1 a nickname `Jacob`.
@@ -30,6 +42,10 @@ On machine2 do the following:
 
 ```
 python setup.py --name Israel
+```
+
+```
+source ~/.bashrc
 ```
 
 This will give machine2 a nickname `Israel`.
