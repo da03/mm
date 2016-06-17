@@ -1,2 +1,3 @@
-gpu: ubuntu@52.36.176.80
 central: yuntiand@cogito.ml.cmu.edu
+name: ubuntu@52.24.243.180
+gpu: ubuntu@52.36.176.80

@@ -30,9 +30,9 @@ def remote_add_machine(app_relative_path, central_server, source_name, source_ma
     user_name = source_machine[:pos]
     host_name = source_machine[(pos+1):]
     public_ip = host_name
-    cmd = 'python %s %s %s %s %s'%(os.path.join(app_relative_path, 'add_machine.py'), source_name, user_name, host_name, public_ip)
-    logging.info('ssh %s %s'%(dest_machine, cmd))
-    ret = subprocess.call(["ssh", dest_machine, cmd])
+    cmd = 'ssh %s "python %s %s %s %s %s"'%(dest_machine, os.path.join(app_relative_path, 'add_machine.py'), source_name, user_name, host_name, public_ip)
+    logging.info('ssh %s %s'%(central_server, cmd))
+    ret = subprocess.call(["ssh", central_server, cmd])
 
 def sync_machine(ssh_relative_path, ssh_abs_path, app_relative_path, app_abs_path, central_server):
     dest_pub_key = os.path.join(app_abs_path, 'id_rsa.pub')
@@ -134,14 +134,14 @@ def main(args):
             source_path = source[(pos+1):]
         else:
             source_name = name
-            source_path = source
+            source_path = os.path.realpath(source)
         pos = dest.find(':')
         if pos > 0:
             dest_name = dest[:pos]
             dest_path = dest[(pos+1):]
         else:
             dest_name = name
-            dest_path = dest
+            dest_path = os.path.realpath(dest)
         params = parse_params(parameters.config_path)
         assert source_name in params, source_name
         assert dest_name in params, dest_name
