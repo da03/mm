@@ -58,7 +58,7 @@ def sync_machine(ssh_relative_path, ssh_abs_path, app_relative_path, app_abs_pat
     print ('scp %s %s'%(source_pub_key, dest_pub_key))
     logging.info('scp %s %s'%(source_pub_key, dest_pub_key))
     ret = subprocess.call(["scp", source_pub_key, dest_pub_key])
-    source_config_file = os.path.join('%s:'%central_server, app_relative_path, 'config.txt')
+    source_config_file = '%s:'%central_server+os.path.join(app_relative_path, 'config.txt')
     dest_config_file = os.path.join(app_abs_path, 'config.txt')
     ret = subprocess.call(["scp", source_config_file, dest_config_file])
     # copy public key file
@@ -81,6 +81,8 @@ def sync_machine(ssh_relative_path, ssh_abs_path, app_relative_path, app_abs_pat
     os.chmod(authorized_keys_path, 0600)
 
 def main(args):
+    if not os.path.isdir('keys'):
+        os.mkdir('keys')
     parameters = process_args(args)
     logging.basicConfig(
         level=logging.DEBUG,
