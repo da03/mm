@@ -1,6 +1,6 @@
 # mm
 
-## Usage:
+Machines Management provides functionalities to assign nicknames to your machines, and you can copy files, list files, log in to other machines by using their nicknames without having to enter the passwords every time.
 
 ### Setup:
 
