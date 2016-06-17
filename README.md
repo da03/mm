@@ -1,4 +1,4 @@
-# mm
+# Machines Management
 
 Painful having to enter passwords when copying files among any two machines you have? 
 
