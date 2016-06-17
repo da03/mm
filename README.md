@@ -18,7 +18,7 @@ central: yourusername@youripaddress
 
 Make sure the modification of `config.txt` is visible to every machine you want to add. A simple way is to update your github repository and clone it on every machine.
 
-Then central server needs to be setuped up, on central server do:
+Then central server needs to be set up, on central server do:
 
 ```
 python setup.py --name central
