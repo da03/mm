@@ -32,5 +32,5 @@ def parse_params(params_file_path):
                 param = param.strip()
                 value = value.strip()
                 params[param] = value
-            return params
-        return None
+        return params
+    return None
