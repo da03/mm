@@ -27,7 +27,7 @@ def add_machine(app_relative_path, central_server, name, user_name, host_name, p
     ret = subprocess.call(["ssh", central_server, cmd])
 
 def sync_machine(ssh_relative_path, ssh_abs_path, app_relative_path, central_server):
-    dest_pub_key = os.path.join(app_relative_path, 'id_rsa.pub')
+    dest_pub_key = os.path.join(app_abs_path, 'id_rsa.pub')
     source_pub_key = "%s:%s"%(central_server,os.path.join(ssh_relative_path, 'id_rsa.pub'))
     print ('scp %s %s'%(source_pub_key, dest_pub_key))
     logging.info('scp %s %s'%(source_pub_key, dest_pub_key))
