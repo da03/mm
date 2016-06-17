@@ -1,4 +1,4 @@
-import sys, subprocess, shutil, os
+import sys, subprocess, shutil, os, re
 
 if __name__ == '__main__':
     name = sys.argv[1]
