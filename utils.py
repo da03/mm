@@ -1,6 +1,8 @@
-import codecs
+import codecs, os
 
 def parse_params(params_file_path):
+    if not os.path.isfile(params_file_path):
+        params_file_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), params_file_path)
     with codecs.open(params_file_path, encoding='utf-8') as fparams:
         params = {}
         line_idx = 0

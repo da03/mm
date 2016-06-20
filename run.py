@@ -154,12 +154,24 @@ def main(args):
         # copy authorized key file
         remote_add_machine(app_relative_path, central_server, source_name, source_machine, dest_machine, ssh_abs_path)
 
-        if mode == 'mcp':
-            cmd = 'scp -q %s %s:%s'%(source_machine+':'+source_path, dest_machine, dest_path)
+        if name == source_name:
+            source_file = source_path
         else:
-            cmd = 'scp -q -r %s %s:%s'%(source_machine+':'+source_path, dest_machine, dest_path)
+            source_file = source_machine+':'+source_path
+        dest_file = dest_machine+':'+dest_path
+        if name == dest_name:
+            dest_file = dest_path
+        else:
+            dest_file = dest_machine+':'+dest_path
+        if mode == 'mcp':
+            cmd = 'scp -q %s %s'%(source_file, dest_file)
+        else:
+            cmd = 'scp -q -r %s %s'%(source_file, dest_file)
         print (cmd)
-        ret = subprocess.call(["ssh", central_server, cmd])
+        if name == source_name or name == dest_name:
+            subprocess.call(cmd, shell=True)
+        else:
+            ret = subprocess.call(["ssh", central_server, cmd])
     elif mode == 'mls':
         pos = dest.find(':')
         if pos > 0:
