@@ -153,6 +153,7 @@ def main(args):
         dest_machine = params[dest_name]
         # copy authorized key file
         remote_add_machine(app_relative_path, central_server, source_name, source_machine, dest_machine, ssh_abs_path)
+        remote_add_machine(app_relative_path, central_server, dest_name, dest_machine, source_machine, ssh_abs_path)
 
         if name == source_name:
             source_file = source_path
