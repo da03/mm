@@ -1,18 +1,27 @@
 # Machines Management
 
-Painful having to enter passwords when copying files among any two machines you have? 
+Assign nicknames to your remote servers (such as EC2 instances) such that you can log in, copy files by very simple commands like:
 
-Tired of adding ssh public key files between each pair of machines you have? 
 
-Not able to remember or discriminate the long ip adresses of your machines? 
+Similar to ssh, we have:
 
-Machines Management (mm) provides functionalities to manage multiple machines, managing SSH key files automatically for you. You can 
+```
+mssh nickename
+```
 
-* assign nicknames to your machines, 
+Similar to scp, we have:
 
-* copy files, list files, log in to other machines by using their nicknames, as simple as `mcp nickname1:path/to/file1 nickname2:path/to/file2`.
+```
+mcp nickname1:path/to/file1 nickename2:path/to/file2
+```
 
-* avoid entering passwords every time after setting up only ONCE. 
+Similar to ls, we have:
+
+```
+mls nickname:path/to/file
+```
+
+Furthermore, you do not need to enter passwords every time after setting up on each machine only ONCE. 
 
 The implementation is purely based on python 2.7, with no additional package requirements.
 
