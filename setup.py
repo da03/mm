@@ -36,7 +36,7 @@ def set_alias(home_abs_path, app_abs_path, name):
                 if 'alias mcp' in line or 'alias mls' in line or 'alias mssh' in line or 'alias mcpr' in line:
                     continue
                 fout.write(line)
-            fout.write('alias mcp=\'python %s %s mcp\'\n'%(os.path.join(app_abs_path, 'run.py'), name))
+            fout.write('alias mcp=\'python %s %s mcpr\'\n'%(os.path.join(app_abs_path, 'run.py'), name))
             fout.write('alias mcpr=\'python %s %s mcpr\'\n'%(os.path.join(app_abs_path, 'run.py'), name))
             fout.write('alias mls=\'python %s %s mls\'\n'%(os.path.join(app_abs_path, 'run.py'), name))
             fout.write('alias mssh=\'python %s %s mssh\'\n'%(os.path.join(app_abs_path, 'run.py'), name))
