@@ -165,9 +165,9 @@ def main(args):
         else:
             dest_file = dest_machine+':'+dest_path
         if mode == 'mcp':
-            cmd = 'scp -q %s %s'%(source_file, dest_file)
+            cmd = 'scp -r %s %s'%(source_file, dest_file)
         else:
-            cmd = 'scp -q -r %s %s'%(source_file, dest_file)
+            cmd = 'scp -r %s %s'%(source_file, dest_file)
         print (cmd)
         if name == source_name or name == dest_name:
             subprocess.call(cmd, shell=True)
